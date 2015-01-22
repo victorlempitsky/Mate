@@ -22,6 +22,16 @@ if ~iscell(opts.monitor)
   opts.monitor = {opts.monitor};
 end
 
+if ~iscell(opts.showBlobs)
+  assert(ischar(opts.showBlobs));
+  opts.showBlobs = {opts.showBlobs};
+end
+
+if ~iscell(opts.showLayers)
+  assert(ischar(opts.showLayers));
+  opts.showLayers = {opts.showLayers};
+end
+
 if ~isempty(opts.expDir) && ~exist(opts.expDir), mkdir(opts.expDir) ; end
 
 rng(0) ;
@@ -168,6 +178,10 @@ for epoch=1:opts.numEpochs
   end
   
   dispTimes(net);
+  if strcmp(net.mode,'gpu') && ~opts.sync
+    warning('Unsynced GPU modes: layer timings are inaccurate.');
+  end
+  
   for t=opts.showBlobs
     dispBlob(net,t{1});
   end

@@ -15,7 +15,7 @@ classdef MateSoftmaxLossLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
-      y = vl_nnsoftmaxloss(x{1}, x{2})*obj.weight;
+      y = vl_nnsoftmaxloss(x{1}, x{2}).*obj.weight;
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)

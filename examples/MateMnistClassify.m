@@ -15,7 +15,7 @@ dataset.imdb = getMnistImdb(dataDir) ;
 f=1/100 ;
 net = MateNet( {
   MateConvLayer(f*randn(5,5,1,20, 'single'), zeros(1, 20, 'single'), ...
-                'stride', 1, 'pad', 0)
+                'stride', 1, 'pad', 0, 'name', 'conv1')
   MatePoolLayer('pool',[2 2], 'stride', 2, 'pad', 0)
   MateConvLayer(f*randn(5,5,20,50, 'single'), zeros(1, 50, 'single'), ...
                 'stride', 1, 'pad', 0, 'weightDecay', [0.005 0.005])
@@ -50,7 +50,8 @@ dataset.batchSize = 100;
 
 [net,info,dataset] = net.trainNet(@getBatch, dataset,...
      'numEpochs',100, 'continue', true, 'expDir', expDir,...
-     'learningRate', 0.001,'monitor', {'loss','error'}) ;
+     'learningRate', 0.001,'monitor', {'loss','error'},...
+     'showLayers', 'conv1') ;
 
 %----------------------------------------------------------%
 
