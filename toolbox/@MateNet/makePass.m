@@ -26,7 +26,8 @@ elseif net.expectIn == 1
   assert( (isa(net.x{1}, 'gpuArray')) == strcmp(net.mode, 'gpu') );
   %gpuMode = isa(net.x{1}, 'gpuArray');
 else
-  assert(iscell(xin) && numel(xin) >= net.expectIn);
+  assert(iscell(xin) && numel(xin) >= net.expectIn,...
+    'The input to the net is not a cell array with a sufficient number of blobs');
 %   if numel(xin) ~= net.expectIn
 %     warning('The network has received more data blobs than it needs');
 %   end

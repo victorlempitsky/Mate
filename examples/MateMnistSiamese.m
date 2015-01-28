@@ -51,10 +51,16 @@ top = {
   MatePairwiseDistLayer('takes',{'conv4','conv4_2'},'name','dist')
   MateMetricHingeLossLayer('takes',{'dist','input:3'},...
         'name','loss', 'margin', 1)
-  MateRankErrorLayer('takes',{'dist','input:3'},'invert',true,'name','rankError')
 };
 
-net = MateNet(cat(1, encoder1, encoder2, top));
+%nearest neighbor evaluator
+nnEval = {
+  MateSqueezeLayer('takes','conv4','skipBackward',true)
+  MateAllDistLayer('name','allDist1','skipBackward',true)
+  MateNNAccuracyLayer('name','nnAccuracy', 'takes',{'allDist1','input:4'})
+};
+
+net = MateNet(cat(1, encoder1, encoder2, top, nnEval));
 
 %subtract the mean
 dataset.imdb.images.data = bsxfun(@minus, dataset.imdb.images.data,...
@@ -76,7 +82,7 @@ dataset.sortedVal = dataset.val(ix); %needed to sample positive pairs
 dataset.batchSize = 100;
 
 [net,info,dataset] = net.trainNet(@getBatch,dataset,...
-    'numEpochs', 4, 'monitor', {'loss','rankError'}, 'showLayers', 'conv1',...
+    'numEpochs', 4, 'monitor', {'loss','nnAccuracy'}, 'showLayers', 'conv1',...
     'sync',false,'continue', false, 'expDir', expDir,...
     'onEpochEnd', @onEpochEnd, 'learningRate', 0.001, 'momentum',0.9) ;
 
@@ -113,7 +119,11 @@ fullBatch1 = [batch(1:end/2) sortedSample(1:end/2)];
 fullBatch2 = [batch(end/2+1:end) sortedSample(end/2+1:end)];
 x{1} = dataset.imdb.images.data(:,:,:,fullBatch1) ;
 x{2} = dataset.imdb.images.data(:,:,:,fullBatch2) ;
-x{3} = single(dataset.imdb.images.labels(1,fullBatch1) == dataset.imdb.images.labels(1,fullBatch2));
+x{3} = single(dataset.imdb.images.labels(1,fullBatch1) == ...
+            dataset.imdb.images.labels(1,fullBatch2));          
+%needed for NN accuracy evaluation:         
+x{4} = single(bsxfun(@eq,dataset.imdb.images.labels(1,fullBatch1),...
+            dataset.imdb.images.labels(1,fullBatch1)'));
 
 %-----------------------------------------
 function [net,dataset] = onEpochEnd(net,dataset)

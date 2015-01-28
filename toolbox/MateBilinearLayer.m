@@ -24,7 +24,7 @@ classdef MateBilinearLayer < MateLayer
 %         m = x{1}(:,i)*x{2}(:,i)'*(dzdy(i)*single(0.5));
 %         obj.weights.dzdw{1} = obj.weights.dzdw{1}+m+m';
 %       end
-      m = x{1}*bsxfun(@times,x{2}',dzdy(:).*single(0.5));
+      m = x{1}*bsxfun(@times,x{2}',dzdy(:));
       obj.weights.dzdw{1} = obj.weights.dzdw{1}+m+m';
       
       dzdx = {zeros(size(x{1}),'like',x{1}),zeros(size(x{2}),'like',x{2})};

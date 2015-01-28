@@ -93,11 +93,18 @@ function net = init(net,layers);
     net.forwardSchedule(i).layer = i;
     net.forwardSchedule(i).out = cs(i)+1:cs(i+1);
     l = net.layers{i};
-    for t = l.takes 
+    for t = l.takes
+      assert(isKey(net.blobsId,t{1}), ...
+        ['Blob "' t{1} '" requested by the layer "' l.name ...
+        '" not found in the network during initialization']);
       net.forwardSchedule(i).in(end+1) = net.blobsId(t{1});
     end
-    assert(net.layers{i}.canTake(numel(net.forwardSchedule(i).in)));
-    assert(net.layers{i}.canProduce(numel(net.forwardSchedule(i).out)));
+    assert(net.layers{i}.canTake(numel(net.forwardSchedule(i).in)),...
+      ['Layer "' net.layers{i}.name '" cannot take '...
+       num2str(numel(net.forwardSchedule(i).in)) ' blob(s).']);
+    assert(net.layers{i}.canProduce(numel(net.forwardSchedule(i).out)),...
+      ['Layer "' net.layers{i}.name '" cannot produce '...
+       num2str(numel(net.forwardSchedule(i).out)) ' blob(s).']);
   end  
 
   %sorting and verifying schedule

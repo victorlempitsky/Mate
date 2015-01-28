@@ -3,6 +3,7 @@ classdef MateLogisticLossLayer < MateLayer
   %the second input should be {-1,1}-label blob
   properties
     weight = single(1);
+    ex = [];
   end
   
   methods (Static)
@@ -17,12 +18,12 @@ classdef MateLogisticLossLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
-      y = sum(log(single(1)+exp(-x{1}.*x{2})),ndims(x{1}))*obj.weight;
+      obj.ex = exp(-x{1}(:).*x{2}(:));
+      y = sum(log(single(1)+exp))*obj.weight;
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
-      E = exp(-x{1}.*x{2});
-      dzdx{1} = x{2}.*E./(E+single(1)).*(-obj.weight/numel(x{1},ndims(x{1})));
+      dzdx{1} = x{2}.*obj.ex./(obj.ex+single(1)).*(-obj.weight/numel(x{1},ndims(x{1})));
       dzdx{2} = [] ;
     end
   end  
