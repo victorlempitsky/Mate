@@ -27,9 +27,8 @@ classdef MateMetricHingeLossLayer < MateLayer
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
       dzdx{1} = zeros(size(x{1}),'like',x{1}) ;
-      N = numel(x{1},ndims(x{1}));
-      dzdx{1}(:) = (obj.positiveWeight/N)*x{2}(:)-...
-              (obj.negativeWeight/N)*(single(1)-x{2}(:)).*(x{1}(:) < obj.margin);
+      dzdx{1}(:) = (obj.positiveWeight)*x{2}(:)-...
+              (obj.negativeWeight)*(single(1)-x{2}(:)).*(x{1}(:) < obj.margin);
       %dzdx{1}(~x{2}(:) & squeeze(x{1}) < obj.margin) = -;
       dzdx{2} = [] ;
     end

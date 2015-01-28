@@ -13,8 +13,8 @@ classdef MateAllDistLayer < MateLayer
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
       sz = size(x);
-      x_ = reshape(x, prod(sz(1:end-1)), sz(end))';      
-      dzdx = reshape(bsxfun(@times, x_, sum(dzdy,1))-x_*dzdy, sz);
+      x_ = reshape(x, prod(sz(1:end-1)), sz(end));      
+      dzdx = reshape( bsxfun(@times, x_, sum(dzdy,1)) - x_*dzdy, sz );
     end
   end  
 end

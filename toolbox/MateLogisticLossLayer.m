@@ -22,7 +22,7 @@ classdef MateLogisticLossLayer < MateLayer
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
       E = exp(-x{1}.*x{2});
-      dzdx{1} = x{2}.*E./(E+single(1)).*(-obj.weight);
+      dzdx{1} = x{2}.*E./(E+single(1)).*(-obj.weight/numel(x{1},ndims(x{1})));
       dzdx{2} = [] ;
     end
   end  

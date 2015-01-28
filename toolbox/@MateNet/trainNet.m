@@ -14,6 +14,7 @@ opts.monitor = {};
 opts.showBlobs = {};
 opts.showLayers = {};
 opts.onEpochEnd = [];
+opts.showTimings = true;
 
 opts = vl_argparse(opts, varargin) ;
 
@@ -177,10 +178,13 @@ for epoch=1:opts.numEpochs
     end
   end
   
-  dispTimes(net);
-  if strcmp(net.mode,'gpu') && ~opts.sync
-    warning('Unsynced GPU modes: layer timings are inaccurate.');
+  if opts.showTimings
+    dispTimes(net);
+    if strcmp(net.mode,'gpu') && ~opts.sync
+      warning('Unsynced GPU modes: layer timings are inaccurate.');
+    end    
   end
+  
   
   for t=opts.showBlobs
     dispBlob(net,t{1});

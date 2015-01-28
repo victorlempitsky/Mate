@@ -49,7 +49,7 @@ encoder2 = {
 %computing the distance and defining the loss
 top = {
   MatePairwiseDistLayer('takes',{'conv4','conv4_2'},'name','dist')
-  MatePairwiseLossLayer('takes',{'dist','input:3'},...
+  MateMetricHingeLossLayer('takes',{'dist','input:3'},...
         'name','loss', 'margin', 1)
   MateRankErrorLayer('takes',{'dist','input:3'},'invert',true,'name','rankError')
 };
@@ -78,7 +78,7 @@ dataset.batchSize = 100;
 [net,info,dataset] = net.trainNet(@getBatch,dataset,...
     'numEpochs', 4, 'monitor', {'loss','rankError'}, 'showLayers', 'conv1',...
     'sync',false,'continue', false, 'expDir', expDir,...
-    'onEpochEnd', @onEpochEnd, 'momentum',0.9) ;
+    'onEpochEnd', @onEpochEnd, 'learningRate', 0.001, 'momentum',0.9) ;
 
 
 % --------------------------------------------------------------------

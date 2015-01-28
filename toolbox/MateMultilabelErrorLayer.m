@@ -16,8 +16,9 @@ classdef MateMultilabelErrorLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
-      [~,pred] = max(x{1},[],3);
-      y = sum(single(pred(:) ~= x{2}(:)));
+      [~,pred] = max(x{1},[],ndims(x{1})-1);
+      [~,gt] = max(x{2},[],ndims(x{1})-1);
+      y = sum(gt(:)~=pred(:))/numel(gt);
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)

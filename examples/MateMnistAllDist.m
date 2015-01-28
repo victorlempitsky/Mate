@@ -4,7 +4,7 @@ function MateMnistAllDist
 
 [thispath,~,~] = fileparts(mfilename('fullpath'));
 dataDir = [thispath '/data/mnist'] ;
-expDir = [thispath '/data/exp'] ;
+expDir = [thispath '/data/expAllDist'] ;
 useGpu = true;
 
 dataset = struct;
@@ -29,8 +29,8 @@ net = MateNet( {
   MateSqueezeLayer
   MateAllDistLayer('name','distances')  
   MateMetricHingeLossLayer('takes',{'distances','input:2'},...
-        'name','loss', 'PositiveWeight', 10)
-  MateRankErrorLayer('takes',{'dist','input:3'},'invert',true,'name','rankError')
+        'name','loss', 'positiveWeight', 10)
+ % MateRankErrorLayer('takes',{'distances','input:2'},'invert',true,'name','rankError')
   } );
 
 
@@ -52,9 +52,12 @@ dataset.train = dataset.train(randperm(numel(dataset.train)));
 dataset.val = dataset.val(randperm(numel(dataset.val)));
 
 [net,info,dataset] = net.trainNet(@getBatch, dataset,...
-     'numEpochs',100, 'continue', true, 'expDir', expDir,...
-     'learningRate', 0.001,'monitor', {'loss','rankError'},...
-     'showLayers', {'conv1','distances'},'onEpochEnd', onEpochEnd) ;
+     'numEpochs',100, 'continue', false, 'expDir', expDir,...
+     'learningRate', 0.001,'monitor', {'loss'},...
+     'showLayers', 'conv1', 'showBlobs', 'distances',...
+     'onEpochEnd', @onEpochEnd, 'learningRate', 0.0001) ;
+   
+end
 
 %----------------------------------------------------------%
 
@@ -82,10 +85,14 @@ else
 end
 
 x{1} = dataset.imdb.images.data(:,:,:,batch) ;
-x{2} = single(bsxfun(@eq,labels.labels'));
+x{2} = single(bsxfun(@eq,labels',labels));
+%repmat(labels,[numel(labels),1])
 
+end
 
 %--------------------------------------------------------------%
 function [net,dataset] = onEpochEnd(net,dataset)
 dataset.train = dataset.train(randperm(numel(dataset.train)));
+
+end
 

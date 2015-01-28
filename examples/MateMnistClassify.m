@@ -24,8 +24,9 @@ net = MateNet( {
                 'stride', 1, 'pad', 0, 'weightDecay', [0.005 0.005])  
   MateReluLayer
   MateConvLayer(f*randn(1,1,500,10, 'single'), zeros(1, 10, 'single'), ...
-                'name','prediction', 'stride', 1, 'pad', 0, ...
-                'weightDecay', [0.005 0.005])   
+                'stride', 1, 'pad', 0, ...
+                'weightDecay', [0.005 0.005])
+  MateSqueezeLayer('name','prediction')
   MateSoftmaxLossLayer('name','loss',...
                 'takes',{'prediction','input:2'})
   MateMultilabelErrorLayer('name','error',...
@@ -57,23 +58,25 @@ dataset.batchSize = 100;
 
 function [x, eoe, dataset] = getBatch(istrain, batchNo, dataset)
 eoe=false;
+batchStart = batchNo*dataset.batchSize+1;
+batchEnd = (batchNo+1)*dataset.batchSize;
+
 if istrain
-  batchStart = batchNo*dataset.batchSize+1;
-  batchEnd = (batchNo+1)*dataset.batchSize;
   if batchEnd >= numel(dataset.train)
     batchEnd = numel(dataset.train);
-    eoe = true;
+    eoe = true; %end of epoch
   end
   batch = dataset.train(batchStart:batchEnd);
 else
-  batchStart = batchNo*dataset.batchSize+1;
-  batchEnd = (batchNo+1)*dataset.batchSize;
   if batchEnd >= numel(dataset.val)
     batchEnd = numel(dataset.val);
     eoe = true; %end of epoch
   end
   batch = dataset.val(batchStart:batchEnd); 
 end
+
 x{1} = dataset.imdb.images.data(:,:,:,batch) ;
-x{2} = dataset.imdb.images.labels(1,batch) ;
+labels = dataset.imdb.images.labels(1,batch) ;
+x{2} = zeros([10 numel(batch)],'single');
+x{2}(sub2ind(size(x{2}),labels(:),(1:numel(batch))')) = single(1);
 
