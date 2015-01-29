@@ -23,7 +23,8 @@ classdef MateWeightedLogisticLossLayer < MateLayer
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
-      dzdx{1} = x{2}.*reshape(obj.ex./(obj.ex+single(1)),size(x{1})).*x{3};
+      dzdx{1} = x{2}(:).*obj.ex./(obj.ex+single(1)).*-x{3}(:);
+      dzdx{1} = reshape(dzdx{1},size(x{1}));      
       dzdx{2} = [];
       dzdx{3} = [];
     end

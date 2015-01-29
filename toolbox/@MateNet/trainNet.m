@@ -65,14 +65,14 @@ for epoch=1:opts.numEpochs
     num2cell(zeros(1,numel(opts.monitor),'single')));
 
   % reset momentum if needed
-  if prevLr ~= lr
-    fprintf('learning rate changed (%f --> %f): resetting momentum\n', prevLr, lr) ;
+  %if prevLr ~= lr
+  %  fprintf('learning rate changed (%f --> %f): resetting momentum\n', prevLr, lr) ;
     for l=1:net.updateSchedule
       for j = 1:numel(net.layers{l}.weights.momentum)
         net.layers{l}.weights.momentum{j}(:) = 0;
       end
     end
-  end
+  %end
   
   eoe = false;
   

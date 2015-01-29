@@ -15,7 +15,7 @@ classdef MateBilinearAllDistLayer < MateLayer
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
       dzdx = obj.weights.w{1}*x*dzdy.*single(2);
-      obj.weights.dzdw{1} = x*dzdy*x';
+      obj.weights.dzdw{1} = obj.weights.dzdw{1}+x*dzdy*x';
     end
     
   end

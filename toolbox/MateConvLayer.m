@@ -18,10 +18,10 @@ classdef MateConvLayer < MateLayer
       switch ndims(x)
         case 4
           y = vl_nnconv(x, obj.weights.w{1}, obj.weights.w{2},...
-          'pad', obj.pad, 'stride', obj.stride);
+           'pad', obj.pad, 'stride', obj.stride);
         case 2 
-        x = squeeze(vl_nnconv(reshape(x,[1 1 size(x)]), obj.weights.w{1}, obj.weights.w{2},...
-          'pad', obj.pad, 'stride', obj.stride));
+          y = squeeze(vl_nnconv(reshape(x,[1 1 size(x)]), obj.weights.w{1}, obj.weights.w{2},...
+            'pad', obj.pad, 'stride', obj.stride));
         otherwise error('Input to a conv layer should have either 2 or 4 dimensions');
       end      
     end
@@ -33,11 +33,11 @@ classdef MateConvLayer < MateLayer
                 dzdy, 'pad', obj.pad, 'stride', obj.stride) ;  
       else
         [dzdx, dzdf, dzdb] = vl_nnconv(...
-                    x, obj.weights.w{1}, obj.weights.w{2}, ...
-                    dzdy, 'pad', obj.pad, 'stride', obj.stride) ;
+                    reshape(x,[1 1 size(x)]), obj.weights.w{1}, obj.weights.w{2}, ...
+                    reshape(dzdy,[1 1 size(dzdy)]), 'pad', obj.pad, 'stride', obj.stride) ;
         dzdx = squeeze(dzdx);
-        dzdf = squeeze(dzdf);
-        dzdb = squeeze(dzdb);
+%        dzdf = squeeze(dzdf);
+%        dzdb = squeeze(dzdb);
       end
       obj.weights.dzdw{1} = obj.weights.dzdw{1}+dzdf;
       obj.weights.dzdw{2} = obj.weights.dzdw{2}+dzdb;

@@ -10,7 +10,6 @@ classdef MateLayer
     skipBackward = false;
     weights = MateParams;
     shareWith = [];
-    isGpu = false;
   end
     
   methods (Abstract)
@@ -55,10 +54,8 @@ classdef MateLayer
     function obj = move(obj, destination)
       switch destination
         case 'gpu'
-          isGpu = true;
           moveop = @(x) gpuArray(x) ;
         case 'cpu'
-          isGpu = false;
           moveop = @(x) gather(x) ;
         otherwise, error('Unknown desitation ''%s''.', destination) ;
       end   
