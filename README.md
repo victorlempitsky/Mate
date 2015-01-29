@@ -13,6 +13,7 @@ Maté provides functionality for:
 * Easy definition of new layers (just define forward and backward operators, which often takes little effort in MATLAB).
 * Easy definition of non-chain networks (any directed acyclic graph can be defined with ease) using MATLAB scripts.
 * Easy GPU mode thanks to MATLAB Parallel Toolbox and MatConvNet routines. For many (most?) new layers same MATLAB code can be reused for CPU and GPU modes.
+* Easy visualization of the internal state of a network during training.
 
 ##Installation 
 Install MatConvNet (http://www.vlfeat.org/matconvnet/), clone this repository, and run setup.m (which simply adds subfolders to MATLAB path).
