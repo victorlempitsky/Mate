@@ -18,6 +18,11 @@ Maté provides functionality for:
 ##Installation 
 Install MatConvNet (http://www.vlfeat.org/matconvnet/), clone this repository, and run setup.m (which simply adds subfolders to MATLAB path).
 
+##Using
+[Defining a network](docs/network.md)
+[Training a network](docs/training.md)
+[Defining a new layer](docs/layer.md)
+
 ##Status
 The project is in a very early prerelease state, use at your own risk.
 
