@@ -20,9 +20,9 @@ Install MatConvNet (http://www.vlfeat.org/matconvnet/), clone this repository, a
 
 ##Using
 Further instructions:
-*[Defining a network/General concepts](docs/network.md)
-*[Training a network](docs/training.md)
-*[Defining a new layer](docs/layer.md)
+* [Defining a network/General concepts](docs/network.md).
+* [Training a network](docs/training.md).
+* [Defining a new layer](docs/layer.md).
 
 ##Status
 The project is in a very early prerelease state, use at your own risk.
