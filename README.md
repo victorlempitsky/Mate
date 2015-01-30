@@ -1,7 +1,7 @@
 #Maté
 
 **Maté** is a MATLAB library for ConvNets (Convolutional Neural Networks).
-Maté is derived from **MatConvNet** (http://www.vlfeat.org/matconvnet/) and uses MatConvNet routines for several time-critical operations. 
+Maté is derived from [**MatConvNet**](http://www.vlfeat.org/matconvnet/) and uses MatConvNet routines for several time-critical operations. 
 
 Maté is object-oriented and has the goal to simplify prototyping and experimentation, in particular
 to minimize the efforts needed to try new non-standard layers and new non-standard network graphs.
