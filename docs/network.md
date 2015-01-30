@@ -20,7 +20,7 @@ The code above defines a network with three layers.
 Each layer is derived from the `MateLayer` class. Each layer has a constructor
 that takes a number of obligatory parameters and a number of optional parameters
 passed in the *('paramName',paramValue)* way, e.g.:
-```
+```matlab
   MateConvLayer(single(0.01)*randn(5,5,1,20, 'single'), zeros(1, 20, 'single'), ...
                 'name','conv1','stride', 1, 'pad', 0)
 ```
@@ -52,7 +52,7 @@ produced by the layer with name `'conv1'`).
 
 The network graph is defined by the `'takes'` attribute that can be passed to 
 the constructor of any layer, e.g.:
-```
+```matlab
   MateNNAccuracyLayer('name','nnAccuracy', 'takes',{'distances','input:2'})
 ```
 The `'takes'` attribute should be set to a cell array of blob names that should serve as inputs to the layer,
@@ -62,7 +62,7 @@ the preceding layer in the cell array (thus chains of layers can be specified
 without specifying `'takes'` attributes explicitly).
 
 At each moment of time after net construction, it is possible to get access to layers and blobs by their names:
-```
+```matlab
 l = net.getLayer('layerA');
 [x,dzdx] = net.getBlob('layerB:2');
 ```
@@ -99,7 +99,7 @@ layers of the old one (and supplementing them with new layers).
 E.g. suppose the original network had two last layers that computed the loss and the error
 and took the ground truth labels as `'input:2'`. Now, to define a testtime network that does not rely on the availability
 of labels and simply provides predictions, simply call:
-```
+```matlab
 net2 = MateNet( net.layers(1:end-2) );
 ```
 Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
@@ -107,7 +107,7 @@ Similar tricks can be used to e.g. pretrain some parts of the big network within
 ### Sharing parameters between layers
 Some architectures requires tying together (sharing) learnable parameters across layers,
 this can be done using `'shareWith'` attribute during layer construction:
-```
+```matlab
 net = MateNet( {
           ...
           MateBlahLayer(W1,W2,'name','Blah1')
