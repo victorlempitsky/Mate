@@ -74,8 +74,27 @@ a bunch of numeric arrays, hence they are also treated as blobs. These blobs hav
 names: `'input:1'`, `'input:2'`, `'input:3'`, etc. E.g. `'input:1'` can contain data, and 
 `'input:2'` can contain labels to be used during training and validation.
 
+### Applying network to data
+Applying the network to data is easy, e.g.:
+```
+batchData = ... %load some data from somewhere
+batchLabels = ... %associated labels
+net = net.makePass( {batchData; batchLabels} );
+prediction = net.getBlob('prediction');
+loss = net.getBlob('loss');
+
+```
+Here, it is assumed that `net` requires two input blobs (i.e. that different blobs in the
+network take `'input:1'` and `'input:2'`). Numeric arrays `batchData` and `batchLabels` will be used
+as such inputs.
+
+The code above also assumes that backward pass is not needed (otherwise use `net.makePass(x,true)`),
+and that the layer named `'prediction'` produces predictions (hence the blob named `'prediction'`
+contains its output). Likewise it is assumed that the layer named `'loss'` computes the loss over
+the batch.
+
 ### Deriving new networks
-Once the network `net` is modified, e.g. train, a new network `net2` can be defined by taking a subset of the 
+Once the network `net` is modified, e.g. trained, a new network `net2` can be defined by taking a subset of the 
 layers of the old ones. E.g. suppose the original network had two last layers that computed the loss and the error
 assuming the ground truth labels are provided. Now, let us define a testtime network that does not rely on the availability
 of labels and simply provides predictions:
@@ -83,20 +102,6 @@ of labels and simply provides predictions:
 net2 = MateNet( net.layers(1:end-2) );
 ```
 Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
-
-### Applying network to data
-Applying the network to data is easy, e.g.:
-```
-x = {data; labels};
-net = net.makePass(x);
-prediction = net.getBlob('prediction');
-loss = net.getBlob('loss');
-
-```
-The code assumes that backward pass is not needed (otherwise use `net.makePass(x,true)`),
-and that the layer named `'prediction'` produces predictions (hence the blob named `'prediction'`
-contains its output). Likewise it is assumed that the layer named `'loss'` computes the loss over
-the batch.
 
 ### Sharing parameters between layers
 Some architectures requires tying gother (sharing) learnable parameters, this can be done using
@@ -113,7 +118,9 @@ net = MateNet( {
 ```
 
 ### CPU/GPU
-A network can be moved to GPU using `net.move('gpu')` and back to CPU using `net.move('cpu')`. 
+Assuming, GPU is present and supported by MATLAB (you can create a gpuArray),
+a network can be moved to GPU using `net.move('gpu')` and back to CPU using `net.move('cpu')`.
+
 
 
 
