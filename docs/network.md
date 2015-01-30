@@ -1,4 +1,4 @@
-## Defining a network/General concepts
+## Building a network
 
 ### Defining a network
 
@@ -13,9 +13,10 @@ net = MateNet( { MateLayerA(....)
                });
 ```
 
-The code above defines a network with three layers. 
+The code above defines a network with three layers (that are created inside
+the call using appropriate constructors). 
 
-### Initializing a layer
+### Creating a layer
 
 Each layer is derived from the `MateLayer` class. Each layer has a constructor
 that takes a number of obligatory parameters and a number of optional parameters
