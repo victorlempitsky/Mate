@@ -26,11 +26,7 @@ classdef MateArgmaxCounterLayer < MateLayer
       
       y = [];
     end
-    
-    function [dzdx,obj] = backward(obj, x, dzdy, y)
-      %will be skipped
-    end
-    
+        
     function obj = displayWeights(obj)
       bar(obj.count);
     end

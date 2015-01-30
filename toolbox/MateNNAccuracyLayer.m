@@ -28,9 +28,5 @@ classdef MateNNAccuracyLayer < MateLayer
       %todo: make more efficient in  GPU mode
       y = mean((x{2}(sub2ind(size(x{2}),[1:numel(lab)],lab))));
     end
-    
-    function [dzdx,obj] = backward(obj, x, dzdy, y)
-      error('Undefined');%will be skipped
-    end
   end  
 end

@@ -1,5 +1,5 @@
 classdef MateLayer
-  
+% The abstract class for all layers in Mate
   properties
     name = {};
     takes = 'preceding';
@@ -14,7 +14,6 @@ classdef MateLayer
     
   methods (Abstract)
     [y,obj] = forward(obj,x)
-    [dzdx,obj] = backward(obj, x, dzdy, y)
   end
   
   methods (Static)
@@ -29,6 +28,10 @@ classdef MateLayer
   
   
   methods
+    function [dzdx,obj] = backward(obj, x, dzdy, y)
+       error('Not defined'); %this stub would do for layers that are not involved in backward pass
+    end
+    
     function obj = MateLayer(params)
       obj.weights = MateParams;
       for i=1:2:numel(params)

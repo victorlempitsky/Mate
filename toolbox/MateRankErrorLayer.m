@@ -32,8 +32,5 @@ classdef MateRankErrorLayer < MateLayer
       y = sum(abs(obj.buf1(:)-obj.buf2(:)).*obj.bufneq(:)./n);
     end
     
-    function [dzdx,obj] = backward(obj, x, dzdy, y)
-      %will be skipped
-    end
   end  
 end

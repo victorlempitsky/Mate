@@ -126,7 +126,7 @@ x{4} = single(bsxfun(@eq,dataset.imdb.images.labels(1,fullBatch1),...
             dataset.imdb.images.labels(1,fullBatch1)'));
 
 %-----------------------------------------
-function [net,dataset] = onEpochEnd(net,dataset)
+function [net,dataset,learningRate] = onEpochEnd(net,dataset,learningRate)
 %-----------------------------------------
 dataset.train = dataset.train(randperm(numel(dataset.train)));
 

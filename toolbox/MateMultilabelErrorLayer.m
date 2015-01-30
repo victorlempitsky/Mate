@@ -20,9 +20,5 @@ classdef MateMultilabelErrorLayer < MateLayer
       [~,gt] = max(x{2},[],ndims(x{1})-1);
       y = sum(gt(:)~=pred(:))/numel(gt);
     end
-    
-    function [dzdx,obj] = backward(obj, x, dzdy, y)
-      %will be skipped
-    end
   end  
 end

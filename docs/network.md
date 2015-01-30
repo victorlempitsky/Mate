@@ -28,7 +28,7 @@ Here, an instance of `MateConvLayer` is created; the two obligatory
 parameters are the initial values of filters and biases, and optional parameters include the layer name,
 stride and padding values.
 
-### Blobs and the network graph
+### Blobs, layers, and the network graph
 
 Blobs in Maté refer to numeric arrays, which serve as inputs and outputs to layers during forward and backward propagation.
 For each blob, a network contains the array of values (`x`) and the array of partial derivatives (`dzdx`). 
@@ -48,7 +48,7 @@ The naming of blobs is automatic. The name of each blob is derived from the name
 E.g. if a layer called `'splitlayer1'` produces three blobs, then these blobs will be called: `'splitlayer1:1'`, `'splitlayer1:2'`,`'splitlayer1:3'`.
 You can omit the trailing `':1'` part if you are refering to the first blob 
 produced by the layer (e.g. blob `'conv1'` is the same as `'conv1:1'` and corresponds to the first blob
-produced by the layer with name `'conv1'`.
+produced by the layer with name `'conv1'`).
 
 The network graph is defined by the `'takes'` attribute that can be passed to 
 the constructor of any layer, e.g.:
@@ -57,20 +57,62 @@ the constructor of any layer, e.g.:
                 'takes',{'distances','input:2'})
 ```
 The `'takes'` attribute should be set to a cell array of blob names that should serve as inputs to the layer.
-If a single blob serves as an input than the curly brackets can be omitted.
+If a single blob serves as an input then the curly brackets can be omitted.
 Finally, by default it is assumed that the layer takes the first blob produced by
-the preceding layer in the cell array (thus a chain network graph can be specified 
-without specifying `'takes'` attributes.
+the preceding layer in the cell array (thus chains of layers can be specified 
+without specifying `'takes'` attributes explicitly).
+
+At each moment of time after net construction, it is possible to get access to layers and blobs by their names:
+```
+l = net.getLayer('layerA');
+[x,dzdx] = net.getBlob('layerB:2');
+```
 
 ### Input to the network
-
 Almost every network requires some input to run on. The input in Maté is assumed to be
 a bunch of numeric arrays, hence they are also treated as blobs. These blobs have special
 names: `'input:1'`, `'input:2'`, `'input:3'`, etc. E.g. `'input:1'` can contain data, and 
-`'input:2'` can contain labels to be used during training.
+`'input:2'` can contain labels to be used during training and validation.
+
+### Deriving new networks
+Once the network `net` is modified, e.g. train, a new network `net2` can be defined by taking a subset of the 
+layers of the old ones. E.g. suppose the original network had two last layers that computed the loss and the error
+assuming the ground truth labels are provided. Now, let us define a testtime network that does not rely on the availability
+of labels and simply provides predictions:
+```
+net2 = MateNet( net.layers(1:end-2) );
+```
+Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
+
+### Applying network to data
+Applying the network to data is easy, e.g.:
+```
+x = {data; labels};
+net = net.makePass(x);
+prediction = net.getBlob('prediction');
+loss = net.getBlob('loss');
+
+```
+The code assumes that backward pass is not needed (otherwise use `net.makePass(x,true)`),
+and that the layer named `'prediction'` produces predictions (hence the blob named `'prediction'`
+contains its output). Likewise it is assumed that the layer named `'loss'` computes the loss over
+the batch.
+
+### Sharing parameters between layers
+Some architectures requires tying gother (sharing) learnable parameters, this can be done using
+`'shareWith'` attribute during layer construction:
+```
+net = MateNet( {
+          ...
+          MateBlahLayer(W1,W2,'name','Blah1')
+          ...
+          ...
+          MateBlahLayer([],[],'name','Blah2','shareWith','Blah1');
+          ...
+          )};
+```
 
 ### CPU/GPU
-
 A network can be moved to GPU using `net.move('gpu')` and back to CPU using `net.move('cpu')`. 
 
 

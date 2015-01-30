@@ -2,7 +2,7 @@ function [net, info, dataset] = trainNet( net, getBatch, dataset, varargin )
 % getBatch signature:
 % [x, eoe, dataset] = getBatch(istrain, batchNo, dataset)
 % onEpochEnd signature:
-% [net,dataset] = onEpochEnd(net,dataset)
+% [net,dataset,learningRate] = onEpochEnd(net,dataset,learningRate)
 
 opts.numEpochs = 100;
 opts.learningRate = 0.001;
@@ -44,7 +44,7 @@ modelPath = [];
 modelFigPath = [];
 for epoch=1:opts.numEpochs
   prevLr = lr ;
-  lr = opts.learningRate(min(epoch, numel(opts.learningRate))) ;
+  lr = opts.learningRate;
 
   if ~isempty(opts.expDir)
     % fast-forward to where we stopped
@@ -197,7 +197,7 @@ for epoch=1:opts.numEpochs
   
   
   if ~isempty(opts.onEpochEnd)
-    [net,dataset] = opts.onEpochEnd(net,dataset);
+    [net,dataset,opts.learningRate] = opts.onEpochEnd(net,dataset,opts.learningRate);
   end
   
   % save
