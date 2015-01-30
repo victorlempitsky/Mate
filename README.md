@@ -7,7 +7,7 @@ Maté is object-oriented and has the goal to simplify prototyping and experiment
 to minimize the efforts needed to try new non-standard layers and new non-standard network graphs.
 
 Maté continues the tradition of naming a ConvNet library after a caffeine-related [drink](http://en.wikipedia.org/wiki/Mate_%28beverage%29).
-Other such libraries include [Decaf](https://github.com/UCB-ICSI-Vision-Group/decaf-release) (Python, CPU) and 
+Other such libraries that also inspired Maté include [Decaf](https://github.com/UCB-ICSI-Vision-Group/decaf-release) (Python, CPU) and 
 [Caffe](http://caffe.berkeleyvision.org/) (C++ with interfaces, CPU/GPU).
 
 ##Functionality

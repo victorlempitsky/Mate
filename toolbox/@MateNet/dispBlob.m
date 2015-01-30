@@ -16,11 +16,12 @@ if ndims(x) == 1
 end
 
 if ndims(x) == 2
-  if max(size(x)) > 200
-    imagesc(x);
-  else
-    pcolor(x);
-  end
+  imagesc(x);
+%   if max(size(x)) > 200
+%     imagesc(x);
+%   else
+%     pcolor(x);
+%   end
 end
 
 if ndims(x) == 3 || ndims(x) == 4

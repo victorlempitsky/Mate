@@ -7,14 +7,14 @@ A network is initialized with a cell array of layers:
 
 ```matlab
 
-net = MateNet( { MateLayerA(....)
+net = MateNet({ MateLayerA(....)
                  MateLayerB(....)
                  MateLayerC(....)
                });
 ```
 
-The code above defines a network with three layers (that are created inside
-the call using appropriate constructors). 
+The code above defines a network with three layers (which are created inside
+this call using appropriate constructors). 
 
 ### Creating a layer
 
@@ -77,8 +77,8 @@ names: `'input:1'`, `'input:2'`, `'input:3'`, etc. E.g. `'input:1'` can contain 
 ### Applying network to data
 Applying the network to data is easy, e.g.:
 ```matlab
-batchData = ... %load some data from somewhere
-batchLabels = ... %associated labels
+batchData = .... %load some data from somewhere
+batchLabels = .... %associated labels
 net = net.makePass( {batchData; batchLabels} );
 prediction = net.getBlob('prediction');
 loss = net.getBlob('loss');
@@ -97,11 +97,14 @@ the batch.
 Once the network `net` is modified, e.g. trained, a new network `net2` can be defined by taking a subset of the 
 layers of the old one (and supplementing them with new layers).
 
-E.g. suppose the original network had two last layers that computed the loss and the error
-and took the ground truth labels as `'input:2'`. Now, to define a testtime network that does not rely on the availability
-of labels and simply provides predictions, simply call:
+E.g. suppose the trained network `net` has two last layers that computed the loss and the error
+and took the ground truth labels as `'input:2'`. Now, a testtime network that does not rely on the availability
+of labels and simply provides predictions can be created with:
 ```matlab
-net2 = MateNet( net.layers(1:end-2) );
+netTest = MateNet( net.layers(1:end-2) );
+testData = .... %get some unlabeled data from somewhere
+netTest = netTest.makePass(testData);
+predictions = netTest.getBlob('prediction');
 ```
 Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
 
@@ -118,7 +121,8 @@ net = MateNet( {
           ...
           )};
 ```
-Now, `'Blah1'` and `'Blah2'` will share learnable parameters.
+Now, `'Blah1'` and `'Blah2'` will share learnable parameters. 
+Note, that `'shareWith'` should point to the layer defined above (earlier in the cell array submitted to `MateNet()`).
 
 ### CPU/GPU
 Assuming, GPU is present and supported by MATLAB (i.e. you can create a gpuArray),

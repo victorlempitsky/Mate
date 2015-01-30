@@ -15,6 +15,7 @@ opts.showBlobs = {};
 opts.showLayers = {};
 opts.onEpochEnd = [];
 opts.showTimings = true;
+opts.snapshotFrequency = 30; %epochs that are kept on the disk
 
 opts = vl_argparse(opts, varargin) ;
 
@@ -42,22 +43,37 @@ info.val = containers.Map(opts.monitor,cell(size(opts.monitor)));
 lr = 0 ;
 modelPath = [];
 modelFigPath = [];
-for epoch=1:opts.numEpochs
-  prevLr = lr ;
-  lr = opts.learningRate;
 
-  if ~isempty(opts.expDir)
-    % fast-forward to where we stopped
-    modelPath = fullfile(opts.expDir, 'net-epoch-%d.mat') ;
-    modelFigPath = fullfile(opts.expDir, 'net-train') ;
-    if opts.continue
-      if exist(sprintf(modelPath, epoch),'file'), continue ; end
-      if epoch > 1
-        fprintf('resuming by loading epoch %d\n', epoch-1) ;
-        load(sprintf(modelPath, epoch-1), 'net', 'info') ;
+latestEpoch = 0;
+
+if ~isempty(opts.expDir)
+  % fast-forward to where we stopped
+  modelPath = fullfile(opts.expDir, 'net-epoch-%d.mat') ;
+  modelFigPath = fullfile(opts.expDir, 'net-train') ;
+  if opts.continue
+    for epoch = 1:opts.numEpochs
+      if exist(sprintf(modelPath, epoch),'file')
+        latestEpoch = epoch;
       end
     end
   end
+end
+
+if latestEpoch > 0
+  fprintf('resuming by loading epoch %d\n', latestEpoch) ;
+  load(sprintf(modelPath, latestEpoch), 'net', 'info') ;
+end
+
+startEpoch = latestEpoch+1;
+
+  
+
+
+
+for epoch=startEpoch:opts.numEpochs
+  prevLr = lr ;
+  lr = opts.learningRate;
+
 
   trainBatchNo = 0;
   
@@ -203,6 +219,9 @@ for epoch=1:opts.numEpochs
   % save
   if ~isempty(modelPath)
     save(sprintf(modelPath,epoch), 'net', 'info') ;
+    if mod(epoch-1,opts.snapshotFrequency) ~= 0 && exist(sprintf(modelPath,epoch-1))
+      delete(sprintf(modelPath,epoch-1));
+    end
   end  
 
 end

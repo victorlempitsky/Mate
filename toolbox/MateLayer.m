@@ -102,11 +102,7 @@ classdef MateLayer
       end
 
       if ndims(x) == 2
-        if max(size(x)) > 200
-          imagesc(x);
-        else
-          pcolor(x);
-        end
+        imagesc(x);
       end
 
       if ndims(x) == 3 || ndims(x) == 4
