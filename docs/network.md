@@ -53,8 +53,7 @@ produced by the layer with name `'conv1'`).
 The network graph is defined by the `'takes'` attribute that can be passed to 
 the constructor of any layer, e.g.:
 ```
-  MateNNAccuracyLayer('name','nnAccuracy',...
-                'takes',{'distances','input:2'})
+  MateNNAccuracyLayer('name','nnAccuracy', 'takes',{'distances','input:2'})
 ```
 The `'takes'` attribute should be set to a cell array of blob names that should serve as inputs to the layer,
 or a single blob name if the layer inputs a single blob.
@@ -76,7 +75,7 @@ names: `'input:1'`, `'input:2'`, `'input:3'`, etc. E.g. `'input:1'` can contain 
 
 ### Applying network to data
 Applying the network to data is easy, e.g.:
-```
+```matlab
 batchData = ... %load some data from somewhere
 batchLabels = ... %associated labels
 net = net.makePass( {batchData; batchLabels} );
