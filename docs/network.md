@@ -5,7 +5,7 @@
 A Maté **network** (`MateNet` class) contains a cell array of **layers**. 
 A network is initialized with a cell array of layers:
 
-```
+```matlab
 
 net = MateNet( { MateLayerA(....)
                  MateLayerB(....)
@@ -13,7 +13,7 @@ net = MateNet( { MateLayerA(....)
                });
 ```
 
-Later, you can access layers using `net.layers` or `net.getLayer(layerName)`. 
+The code above defines a network with three layers. 
 
 ### Initializing a layer
 
@@ -38,16 +38,16 @@ Each layer vertex points to the blob vertices corresponding to blobs produced by
 Each blob vertex points to the layer vertices corresponding to layers that take this blob during forward propagation.
 A valid graph needs to be directed acyclic. The graph is defined via the naming system and the `takes` attribute.
 
-### Defining the network graph
+### Naming layers and blobs
 
-Each layer and each blob in the network have its names. The name of each layer 
+Each layer and each blob in the network has its own name. The name of each layer 
 can be specified during construction using the `'name'` attribute (as in the example above).
 Otherwise a name will be assigned automatically (e.g. `'MateConvLayer_004'`).
 
-The naming of blobs is automatic. The name of each blob is derived from the name of a layer that produces it. 
-E.g. if a layer called `'splitlayer1'` produces three blobs, then these blobs will be called: `'splitlayer1:1'`, `'splitlayer1:2'`,`'splitlayer1:3'`.
+The naming of blobs is automatic. The name of each blob is derived from the name of a layer that produces this blob. 
+E.g. if a layer called `'splitlayer1'` produces three blobs, then these blobs will be named: `'splitlayer1:1'`, `'splitlayer1:2'`,`'splitlayer1:3'`.
 You can omit the trailing `':1'` part if you are refering to the first blob 
-produced by the layer (e.g. blob `'conv1'` is the same as `'conv1:1'` and corresponds to the first blob
+produced by the layer (e.g. a blob name `'conv1'` is an alias for `'conv1:1'` and corresponds to the first blob
 produced by the layer with name `'conv1'`).
 
 The network graph is defined by the `'takes'` attribute that can be passed to 
@@ -56,9 +56,9 @@ the constructor of any layer, e.g.:
   MateNNAccuracyLayer('name','nnAccuracy',...
                 'takes',{'distances','input:2'})
 ```
-The `'takes'` attribute should be set to a cell array of blob names that should serve as inputs to the layer.
-If a single blob serves as an input then the curly brackets can be omitted.
-Finally, by default it is assumed that the layer takes the first blob produced by
+The `'takes'` attribute should be set to a cell array of blob names that should serve as inputs to the layer,
+or a single blob name if the layer inputs a single blob.
+By default it is assumed that the layer takes the first blob produced by
 the preceding layer in the cell array (thus chains of layers can be specified 
 without specifying `'takes'` attributes explicitly).
 
@@ -84,7 +84,7 @@ prediction = net.getBlob('prediction');
 loss = net.getBlob('loss');
 
 ```
-Here, it is assumed that `net` requires two input blobs (i.e. that different blobs in the
+Here, it is assumed that `net` requires two input blobs (i.e. that different layers in the
 network take `'input:1'` and `'input:2'`). Numeric arrays `batchData` and `batchLabels` will be used
 as such inputs.
 
@@ -95,17 +95,19 @@ the batch.
 
 ### Deriving new networks
 Once the network `net` is modified, e.g. trained, a new network `net2` can be defined by taking a subset of the 
-layers of the old ones. E.g. suppose the original network had two last layers that computed the loss and the error
-assuming the ground truth labels are provided. Now, let us define a testtime network that does not rely on the availability
-of labels and simply provides predictions:
+layers of the old one (and supplementing them with new layers).
+
+E.g. suppose the original network had two last layers that computed the loss and the error
+and took the ground truth labels as `'input:2'`. Now, to define a testtime network that does not rely on the availability
+of labels and simply provides predictions, simply call:
 ```
 net2 = MateNet( net.layers(1:end-2) );
 ```
 Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
 
 ### Sharing parameters between layers
-Some architectures requires tying gother (sharing) learnable parameters, this can be done using
-`'shareWith'` attribute during layer construction:
+Some architectures requires tying together (sharing) learnable parameters across layers,
+this can be done using `'shareWith'` attribute during layer construction:
 ```
 net = MateNet( {
           ...
@@ -116,10 +118,12 @@ net = MateNet( {
           ...
           )};
 ```
+Now, `'Blah1'` and `'Blah2'` will share learnable parameters.
 
 ### CPU/GPU
-Assuming, GPU is present and supported by MATLAB (you can create a gpuArray),
-a network can be moved to GPU using `net.move('gpu')` and back to CPU using `net.move('cpu')`.
+Assuming, GPU is present and supported by MATLAB (i.e. you can create a gpuArray),
+a network can be moved to GPU using `net = net.move('gpu');` and back to CPU using `net = net.move('cpu');`.
+MATLAB version R2014b (or later) is highly recommended for the GPU mode of Maté (and, in fact, MatConvNet).
 
 
 
