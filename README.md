@@ -6,7 +6,7 @@ Maté is derived from [**MatConvNet**](http://www.vlfeat.org/matconvnet/) and us
 Maté is object-oriented and has the goal to simplify prototyping and experimentation, in particular
 to minimize the efforts needed to try new non-standard layers and new non-standard network graphs.
 
-Maté continues the tradition of naming ConvNet libraries after caffeine-related drinks (http://en.wikipedia.org/wiki/Mate_%28beverage%29).
+Maté continues the tradition of naming a ConvNet library after a caffeine-related [drink](http://en.wikipedia.org/wiki/Mate_%28beverage%29).
 Other such libraries include [Decaf](https://github.com/UCB-ICSI-Vision-Group/decaf-release) (Python, CPU) and 
 [Caffe](http://caffe.berkeleyvision.org/) (C++ with interfaces, CPU/GPU).
 
