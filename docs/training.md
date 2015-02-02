@@ -8,15 +8,15 @@ This variable is first passed to the main training function (discussed below) an
 it is called. All passes are by reference. For a small dataset, the whole data can be stored as a field, for bigger ones
 some kind of iterators over the disk data can be used.
 3. Write a batch provider function that must have the following nomenclature:
-⋅⋅⋅```
+```
 [x, eoe, dataset] = getBatch(istrain, batchNo, dataset)
 ```
-⋅⋅⋅The input variables are: whether a train or a validation batch is requested (`istrain`), the number of the batch in 
-⋅⋅⋅the epoch (`batchNo`) and, finally, the dataset (`dataset`). 
-⋅⋅⋅The first output should return the network input `x` that will be used as `input:1`,`input:2`,etc. blobs.
-⋅⋅⋅The second output should be a boolean variable whether this batch ends the epoch. E.g. use the following
-⋅⋅⋅fragment to make all training epochs contain 100 batches and all validation epochs contain 10 batches.
-⋅⋅⋅```
+The input variables are: whether a train or a validation batch is requested (`istrain`), the number of the batch in 
+the epoch (`batchNo`) and, finally, the dataset (`dataset`). 
+The first output should return the network input `x` that will be used as `input:1`,`input:2`,etc. blobs.
+The second output should be a boolean variable whether this batch ends the epoch. E.g. use the following
+fragment to make all training epochs contain 100 batches and all validation epochs contain 10 batches.
+```
 [x, eoe, dataset] = getBatch(istrain, batchNo, dataset)
 ......
 if istrain
@@ -26,6 +26,7 @@ else
 end
 ......
 ```
+
 4. Finally, call the training function:
 ```
 [net, info, dataset] = net.trainNet( @getBatch, dataset, .......);
