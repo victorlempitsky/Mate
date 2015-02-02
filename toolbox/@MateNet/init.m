@@ -1,4 +1,6 @@
-function net = init(net,layers);
+function net = init(net,layers)
+% builds a network starting from the cell array of layers
+
   net.layers = layers;
   N = numel(net.layers);
 
@@ -26,8 +28,9 @@ function net = init(net,layers);
     if ~iscell(net.layers{i}.takes)
       net.layers{i}.takes={net.layers{i}.takes};
     end
+    net.layers{i}.takes = net.layers{i}.takes(:)';
     for t = net.layers{i}.takes   
-      [layerName, blobNo] = parseid(t);
+      [layerName, blobNo] = parseid(t{1});
       if isKey(demand, layerName)
         demand(layerName) = [demand(layerName) blobNo];
       else
@@ -58,9 +61,9 @@ function net = init(net,layers);
     if any(d < 1) || any( d ~= uint8(d))
       error(['Not a positive integer output index requested for layer ' n]);
     end
-    if numel(unique(d)) < numel(d) && ~strcmpi(n, 'input')
-      warning(['One of the outputs of layer ' n ' is reused at least twice. Mind potential overwrite of the derivatives during backprop.']);
-    end
+%     if numel(unique(d)) < numel(d) && ~strcmpi(n, 'input')
+%       warning(['One of the outputs of layer ' n ' is reused at least twice. Mind potential overwrite of the derivatives during backprop.']);
+%     end
     if numel(unique(d)) < max(d)
       warning(['At least one of the outputs of layer ' n ' is unused.']);
     end
@@ -153,8 +156,19 @@ function net = init(net,layers);
     eraseBackward(i) = net.layers{net.backwardSchedule(i).layer}.skipBackward;
   end
   net.backwardSchedule(eraseBackward == true) = [];
+  
+  %checking backward schedule for overlaps
+  
+  net.nBlobs = max(cell2mat(net.blobsId.values));  
+  
+  updateBackward = zeros(1,net.nBlobs);
+  for i = 1:numel(net.backwardSchedule)
+    updateBackward(net.backwardSchedule(i).in) = updateBackward(net.backwardSchedule(i).in)+1;
+  end  
+  if any(updateBackward > 1)
+    error('At least one blob needs to be updated twice during backprop. Consider using a split layer.');
+  end
 
-  net.nBlobs = max(cell2mat(net.blobsId.values));
   net.x = cell(net.nBlobs,1);
   net.dzdx = cell(net.nBlobs, 1);
   
@@ -164,7 +178,7 @@ function net = init(net,layers);
 end
 
 function [layerName, blobNo] = parseid(str)
-  [layerName, blobNo] = strtok(str,':');
+  [layerName, blobNo] = strtok({str},':');
   assert(numel(layerName) == 1);
   layerName = layerName{1};
   blobNo = blobNo{1};

@@ -16,7 +16,7 @@ if ndims(x) == 1
 end
 
 if ndims(x) == 2
-  imagesc(x);
+  imagesc(x); colorbar;
 %   if max(size(x)) > 200
 %     imagesc(x);
 %   else
@@ -25,6 +25,6 @@ if ndims(x) == 2
 end
 
 if ndims(x) == 3 || ndims(x) == 4
-  imagesc(getPlate(x));  
+  imagesc(getPlate(x)); colorbar;  
 end
 

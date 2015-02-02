@@ -1,7 +1,26 @@
 function x = getPlate(array, maxSz)
+%turns a 3D or 4D array into a squarish 2D array displayable by imagesc via
+%reshaping, subsampling, padding.
+%Outputs a 2D unnormalized array if size(array,3)~=3 and a normalized
+%3-channeled array otherwise.
 
 x = squeeze(array);
-assert(ndims(x) > 2,'getPlate should be called for arrays of dimensionality 3 or 4.');
+assert(ndims(x) == 3 || ndims(x) == 4,'getPlate should be called for arrays of dimensionality 3 or 4.');
+
+if size(array,3) == 3 
+  if ndims(array) == 3
+    x = cat(3, getPlate(array(:,:,1)),...
+      getPlate(array(:,:,2)),...
+      getPlate(array(:,:,3)));
+  else
+    x = cat(3, getPlate(array(:,:,1,:)),...
+      getPlate(array(:,:,2,:)),...
+      getPlate(array(:,:,3,:)));
+  end
+  x = x-min(x(:));
+  x = x/max(x(:));
+  return
+end
 
 if nargin == 1
   maxSz = 1024;

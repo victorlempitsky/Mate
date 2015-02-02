@@ -197,7 +197,7 @@ for epoch=startEpoch:opts.numEpochs
   if opts.showTimings
     dispTimes(net);
     if strcmp(net.mode,'gpu') && ~opts.sync
-      warning('Unsynced GPU modes: layer timings are inaccurate.');
+      warning('Unsynced in GPU mode: layer timings are inaccurate.');
     end    
   end
   

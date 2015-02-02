@@ -102,11 +102,11 @@ classdef MateLayer
       end
 
       if ndims(x) == 2
-        imagesc(x);
+        imagesc(x); colorbar;
       end
 
       if ndims(x) == 3 || ndims(x) == 4
-        imagesc(getPlate(x));  
+        imagesc(getPlate(x)); colorbar;  
       end      
     end
     

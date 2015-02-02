@@ -20,7 +20,13 @@ classdef MateNet
       net = net.init(net.layers);
       if strcmp(net.mode,'gpu')
         net.mode = 'cpu';
-        net = net.move('gpu');
+        try
+          net = net.move('gpu');
+        catch
+          warning('Unable to move the network to GPU');
+          net.mode = 'gpu';
+          net = net.move('cpu');
+        end
       end        
     end    
   end
@@ -42,7 +48,6 @@ classdef MateNet
  
     net = init(net,layers)
     net = makePass(net, xin, dobackward, varargin)
-    net = checkDerivatives(net, xin)
     [net, info, dataset] = trainNet( net, getBatch, dataset, varargin )
     net = move(net, destination)
     l = getLayer(net, layerName)
