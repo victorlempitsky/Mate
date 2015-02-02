@@ -34,7 +34,7 @@ classdef MateFooLayer < MateLayer
   end  
 end
 ```
-Keep, the call to the base constructor as it is shown above. This will allow
+...Keep, the call to the base constructor as it is shown above. This will allow
 to set properties using `'propertyName',propertyValue` format. This will work
 both for base properties and the new properties. E.g. with such call it is possible to create the 
 new layer using `foo = MateFooLayer('name','foooo','bar',101);`.
@@ -46,7 +46,7 @@ function [y,obj] = forward(obj,x)
 end
 ```
 
-* If your layer does not participate in backprop (e.g. it measures some sort of error), make sure to
+* If your layer does not participate in backprop (e.g. it measures some sort of error), 
 add `obj.skipBackward = true;` to the constructor.
 
 * Otherwise, redefine the **backward** member function that propagates the partial derivative `dzdy` further backwards into `dzdx`, 
@@ -57,7 +57,7 @@ function [dzdx,obj] = backward(obj, x, dzdy, y)
   obj.weights.dzdw{1} = obj.weights.dzdw{1}+obj.bar*x.*dzdy;
 end
 ```
-Note, that `dzdw` should be updated by addition (not by assignment) in order to allow parameter sharing.
+...Note, that `dzdw` should be updated by addition (not by assignment) in order to allow parameter sharing.
 
 * If you are defining a **loss layer** than the `backward` operator should **ignore** the `dzdy` variable, and
 simply define the derivative of the loss `dzdx`.
@@ -72,7 +72,7 @@ methods (Static)
   end 
 end
 ```
-This checks that the layer's output is used by at least two layers when the network is constructed.
+...This checks that the layer's output is used by at least two layers when the network is constructed.
 
 * If your layer has more than one input and/or output, then the corresponding arrays among `x`,`y`,`dzdx`,`dzdy` should
 be treated as cell arrays, e.g. for a layer that sums the two inputs:
