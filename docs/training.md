@@ -38,10 +38,10 @@ They are given in the table:
 ------------------------------| ----------- 
 `numEpochs=100` | Training duration 
 `learningRate=0.001` | A scalar, specifying learning rate for SGD 
-`continue=false` | Whether to load the snapshot with the highest iteration number from disk 
-`expDir=[]` | Export dir where snapshots and progress plots are saved to (and loaded from if `continue == true`). No saving/loading happening if empty 
-`sync=verLessThan('matlab', '8.4')` | Whether to synchronize calls in GPU mode. Speeds things up (according to matconvnet authors) in R2014a and before. Slows things down in R2014b.
 `momentum=0.9` | Momentum in SGD
+`expDir=[]` | Export dir where snapshots and progress plots are saved to (and loaded from if `continue == true`). No saving/loading happening if empty 
+`continue=false` | Whether to load the snapshot with the highest iteration number from disk 
+`sync=verLessThan('matlab', '8.4')` | Whether to synchronize calls in GPU mode. Speeds things up (according to matconvnet authors) in R2014a and before. Slows things down in R2014b.
 `monitor={}` | A cell array with the names of the blobs to be "monitored" during training and evaluations. These blobs must be scalar (perhaps produced by some loss or error layer). The training process then shows their value at each iteration, records them into the info structure (returned by training), plots them as training progresses (starting from iteration 2), ans saves plots to disk (to `expDir`).
 `showBlobs={}`| A cell array with the names of the blobs to be visualized after each epoch
 `showLayers={}`| A cell array with the names of the layers, whose weights will be visualized after each epoch
@@ -50,8 +50,12 @@ They are given in the table:
 `onEpochEnd = []`| The callback that can be used for extra monitoring and adjustments
 ---
 
-The `onEpochEnd` can be set to a pointer to the function with the following nomenclature:
+The `onEpochEnd` can be set to a handle to the function with the following nomenclature:
 ```
 [net,dataset,learningRate] = onEpochEnd(net,dataset,learningRate)
 ```
-Inside it, the function can do arbitrary things to the network, the dataset, and the learning rate.
+If nonempty, `onEpochEnd` will be called after each epoch with the current state of the network, the dataset,
+and the learning rate passed as arguments.
+Inside it, the function can do arbitrary things to these variables (e.g. reshuffle the batches, tweak the learning rate, etc.)
+
+
