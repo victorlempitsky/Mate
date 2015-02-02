@@ -60,7 +60,7 @@ and also computes (and adds to the current state of) the `dzdw` partial derivati
   Note, that `dzdw` should be updated by addition (not by assignment) in order to allow parameter sharing.
 
 * If you are defining a **loss layer** than the `backward` operator should **ignore** the `dzdy` variable, and
-simply define the derivative of the loss `dzdx`.
+simply emit the derivative of the loss `dzdx`. If you want to introduce weighting, you can define an appropriate `weight` property.
 
 * **Multiple inputs and outputs.** By default, it is assumed that each layer takes one input and one output. 
   If it is not the case for your layer, then redefine the static functions `canTake` and/or `canProduce` that should
