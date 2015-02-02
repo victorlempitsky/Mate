@@ -31,21 +31,7 @@ end
 [net, info, dataset] = trainNet( net, @getBatch, dataset, .......)
 ```
 The call has a large number of options passed using `'optsName',optsValue` format.
-They are:
-
-opts.numEpochs = 100;
-opts.learningRate = 0.001;
-opts.continue = false;
-opts.expDir = [];
-opts.sync = verLessThan('matlab', '8.4');
-opts.momentum = 0.9 ;
-opts.monitor = {};
-opts.showBlobs = {};
-opts.showLayers = {};
-opts.onEpochEnd = [];
-opts.showTimings = true;
-opts.snapshotFrequency = 30;
-
+They are given in the table:
 
  Option name (=default) | Description 
 -----------------------| ----------- 
@@ -53,9 +39,18 @@ opts.snapshotFrequency = 30;
 `learningRate=0.001` | A scalar, specifying learning rate for SGD 
 `continue=false` | Whether to load the snapshot with the highest iteration number from disk 
 `expDir=[]` | Export dir where snapshots and progress plots are saved to (and loaded from if `continue == true`). No saving/loading happening if empty 
-`sync=verLessThan('matlab', '8.4')` | > Whether to synchronize calls in GPU mode. Speeds things up (according to matconvnet authors) in R2014a and before. Slows things down in R2014b.
+`sync=verLessThan('matlab', '8.4')` | Whether to synchronize calls in GPU mode. Speeds things up (according to matconvnet authors) in R2014a and before. Slows things down in R2014b.
 `momentum=0.9` | Momentum in SGD
-----
-`monitor` | > A cell array that specifys the names of the blobs to be "monitored" during training and evaluations. These blobs must be scalar (perhaps produced by some loss or error layer). The training process then records them into the info structure (returned by training), plots them as training progress (starting from iteration 2), ans saves plots to disk (to `expDir`).
-`
+`monitor={}` | A cell array with the names of the blobs to be "monitored" during training and evaluations. These blobs must be scalar (perhaps produced by some loss or error layer). The training process then shows their value at each iteration, records them into the info structure (returned by training), plots them as training progress (starting from iteration 2), ans saves plots to disk (to `expDir`).
+`showBlobs={}`| A cell array with the names of the blobs to be visualized after each epoch
+`showLayers={}`| A cell array with the names of the layers, whose weights will be visualized after each epoch
+`showTimings=true`| Whether to show forward and backward timings for each layer in a separate figure after each epoch
+`snapshotFrequency=30`| The process saves the current state to disk after every epoch and then erases the previous state (to save disk space). If `snapshotFrequency` divides the epoch number, the snapshot is not erased and is kept on the disk.
+`onEpochEnd = []`| The callback that can be used for extra monitoring and adjustments
+---
 
+The `onEpochEnd` can be set to a pointer to the function with the following nomenclature:
+```
+[net,dataset,learningRate] = onEpochEnd(net,dataset,learningRate)
+```
+Inside it, the function can do arbitrary things to the network, the dataset, and the learning rate.
