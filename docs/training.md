@@ -26,7 +26,6 @@ else
 end
 ......
 ```
-
 4. Call the training function:
 ```
 [net, info, dataset] = trainNet( net, @getBatch, dataset, .......)
@@ -48,9 +47,15 @@ opts.showTimings = true;
 opts.snapshotFrequency = 30;
 
 
- Option name (default) | Description 
+ Option name (=default) | Description 
 -----------------------| ----------- 
-`numEpochs` (`100`) | Training duration 
-`learningRate` (`0.001`) | A scalar, specifying learning rate for SGD 
-`continue` (`false`) | Whether to load the snapshot with the highest iteration number from disk 
-`expDir` ( `[]` ) | Export dir where snapshots and progress plots are saved to (and loaded from if `continue == true`) 
+`numEpochs=100` | Training duration 
+`learningRate=0.001` | A scalar, specifying learning rate for SGD 
+`continue=false` | Whether to load the snapshot with the highest iteration number from disk 
+`expDir=[]` | Export dir where snapshots and progress plots are saved to (and loaded from if `continue == true`). No saving/loading happening if empty 
+`sync=verLessThan('matlab', '8.4')` | > Whether to synchronize calls in GPU mode. Speeds things up (according to matconvnet authors) in R2014a and before. Slows things down in R2014b.
+`momentum=0.9` | Momentum in SGD
+----
+`monitor` | > A cell array that specifys the names of the blobs to be "monitored" during training and evaluations. These blobs must be scalar (perhaps produced by some loss or error layer). The training process then records them into the info structure (returned by training), plots them as training progress (starting from iteration 2), ans saves plots to disk (to `expDir`).
+`
+
