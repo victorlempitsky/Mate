@@ -2,12 +2,12 @@
 
 To train a network you need to follow the following four steps.
 
-1. [Build the network](network.md).
-2. Create the `dataset` variable (e.g. a structure) that describes the training and the validation datasets.
+* [Build the network](network.md).
+* Create the `dataset` variable (e.g. a structure) that describes the training and the validation datasets.
 This variable is first passed to the main training function (discussed below) and then passed back to the batch provider every time
 it is called. All passes are by reference. For a small dataset, the whole data can be stored as a field, for bigger ones
 some kind of iterators over the disk data can be used.
-3. Write a batch provider function that must have the following nomenclature:
+* Write a batch provider function that must have the following nomenclature:
 ```
 [x, eoe, dataset] = getBatch(istrain, batchNo, dataset)
 ```
@@ -27,7 +27,7 @@ end
 ......
 ```
 
-4. Finally, call the training function:
+* Finally, call the training function:
 ```
 [net, info, dataset] = net.trainNet( @getBatch, dataset, .......);
 ```
