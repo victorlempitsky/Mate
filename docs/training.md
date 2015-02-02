@@ -35,7 +35,7 @@ The call has a large number of options passed using `'optsName',optsValue` forma
 They are given in the table:
 
  Option name (=default) | Description 
------------------------| ----------- 
+------------------------------| ----------- 
 `numEpochs=100` | Training duration 
 `learningRate=0.001` | A scalar, specifying learning rate for SGD 
 `continue=false` | Whether to load the snapshot with the highest iteration number from disk 
