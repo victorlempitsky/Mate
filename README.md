@@ -15,7 +15,8 @@ Other such libraries that also inspired Maté include [Decaf](https://github.com
 ##Functionality
 Maté provides functionality for:
 * Easy definition of new layers (just define forward and, if needed, backward procedures; it often takes couple of lines in MATLAB).
-* Easy definition of non-chain networks (any directed acyclic graph can be defined with ease) within MATLAB code.
+* Easy definition and training of non-chain networks (any directed acyclic graph can be used) within MATLAB code.
+* Easy loading and manipulation of pretrained networks.
 * Easy GPU mode thanks to MATLAB Parallel Toolbox and MatConvNet routines. For many (most?) new layers same MATLAB code can be reused for CPU and GPU modes.
 * Easy visualization of the internal state of a network during training.
 
