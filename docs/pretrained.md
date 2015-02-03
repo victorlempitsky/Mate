@@ -37,4 +37,4 @@ output = net.getBlob(layers{end}.name);
 Obviously, one can build new networks using parts of the repository network:
 ```matlab
 layers = readMatConvNet(modelfilename);
-net = MateNet([layers(1:5); newTop]); %newTop is a cell array with new top layers to be trained from scratch
+net = MateNet([layers(1:5); newTop]); %newTop is a cell array with new top layers to be trained
