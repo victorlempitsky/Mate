@@ -36,6 +36,9 @@ net = net.makePass(batch);
 tm = toc;
 fprintf('Batch forward-passed on CPU in %f sec.\n', tm);
 
+dispTimes(net);
+disp('Press a key...');
+pause;
 
 %let us measure on GPU
 batch = gpuArray(batch);
@@ -50,3 +53,4 @@ end
 tm = toc;
 fprintf('Batch forward-passed on GPU in %f sec.\n', tm/10);
 
+net = net.dispTimes;

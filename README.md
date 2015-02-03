@@ -24,6 +24,7 @@ Install MatConvNet from [here](http://www.vlfeat.org/matconvnet/), clone this re
 
 ##Howto
 * [Build a network (+other basics)](docs/network.md)
+* [Use a pre-trained network](docs/pretrained.md)
 * [Train a network](docs/training.md)
 * [Layer catalog](docs/catalog.md)
 * [Define a new layer](docs/layer.md)
