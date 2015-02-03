@@ -104,7 +104,7 @@ for epoch=startEpoch:opts.numEpochs
         x{i} = gpuArray(x{i}) ;
       end
     end
-    
+%     
     %resetting 
     for i=net.updateSchedule
       for j=1:numel(net.layers{i}.weights.dzdw)

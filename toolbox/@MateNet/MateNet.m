@@ -53,7 +53,7 @@ classdef MateNet
     l = getLayer(net, layerName)
     [x, dzdx] = getBlob(net, blobName)
     dispTimes(net)
-    dispBlob(net,blobName)  
+    dispBlob(net,blobNames) %displays one or multiple blobs 
   end
   
 end

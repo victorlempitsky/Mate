@@ -8,6 +8,7 @@ classdef MateSoftmaxLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
+      x = squeeze(x);
       dim = ndims(x)-1;
       y = exp(bsxfun(@minus,x,max(x,[],dim)).*obj.gamma);
       y = bsxfun(@rdivide,y,sum(y,dim));

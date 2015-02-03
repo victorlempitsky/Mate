@@ -1,6 +1,6 @@
 ## Defining a new layer
 
-To define a new layer, derive a new class from `MateLayer` (which is a base class (superclass) for all layers in Maté).
+To define a new layer, derive a new class from `MateLayer`, which is a base class (superclass) for all layers in Maté.
 After this derivation, your layer will have such properties as `name`,`takes`,`shareWith` that are all discussed in
 the [basics section](network.md).
 
@@ -39,7 +39,7 @@ parameter, `weights.w{2}` to the second, etc. Likewise, `weights.dzdw{i}` refers
   both for base properties and the new properties. E.g. with such call it is possible to create the 
   new layer using `foo = MateFooLayer('name','foooo','bar',101);`.
 
-* Define a **forward** member function that converts input `x` into the output `y` during forward propagation,e.g.:
+* Define a **forward** member function that converts input `x` into the output `y` during forward propagation, e.g.:
   ```matlab
   function [y,obj] = forward(obj,x)
     y = x.*obj.weights.w{1}*obj.bar;

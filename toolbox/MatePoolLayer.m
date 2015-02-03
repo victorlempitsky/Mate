@@ -1,4 +1,6 @@
 classdef MatePoolLayer < MateLayer
+% implements spatial pooling within CNN
+%a wrapper around MatConvNet pooling
   properties
     pool = [2,2];
     pad = 0;

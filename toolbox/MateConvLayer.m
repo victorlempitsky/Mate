@@ -15,19 +15,19 @@ classdef MateConvLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
-      switch ndims(x)
-        case 4
-          y = vl_nnconv(x, obj.weights.w{1}, obj.weights.w{2},...
+      if ndims(x) > 2
+        y = vl_nnconv(x, obj.weights.w{1}, obj.weights.w{2},...
            'pad', obj.pad, 'stride', obj.stride);
-        case 2 
-          y = squeeze(vl_nnconv(reshape(x,[1 1 size(x)]), obj.weights.w{1}, obj.weights.w{2},...
+      else
+        assert(ndims(x) == 2);
+        y = squeeze(vl_nnconv(reshape(x,[1 1 size(x)]), obj.weights.w{1}, obj.weights.w{2},...
             'pad', obj.pad, 'stride', obj.stride));
-        otherwise error('Input to a conv layer should have either 2 or 4 dimensions');
+        %otherwise error('Input to a conv layer should have either 2 or 4 dimensions');
       end      
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)
-      if ndims(x) == 4
+      if ndims(x) > 2
         [dzdx, dzdf, dzdb] = vl_nnconv(...
                 x, obj.weights.w{1}, obj.weights.w{2}, ...
                 dzdy, 'pad', obj.pad, 'stride', obj.stride) ;  

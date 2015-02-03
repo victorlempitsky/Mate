@@ -51,6 +51,7 @@ function net = init(net,layers)
 
   net.expectIn = 0;
   noutputs = ones(1,N); %we expect that each layer has at least one output
+    
   for n=net.layersId.keys
     n = n{1};
     if ~isKey(demand, n)
@@ -82,9 +83,19 @@ function net = init(net,layers)
   if net.expectIn > 0
     net.blobsId('input')=1;
   end
+  
+  for i=1:N
+    while ~net.layers{i}.canProduce(noutputs(i))
+      noutputs(i) = noutputs(i)+1;
+      assert(noutputs(i) < 100, ['The layer ' net.layers{i}.name...
+          ' cannot produce the required number of blobs']); %assuming >100 blobs cannot be requested
+    end
+  end
+  
   cs = [net.expectIn cumsum(noutputs)+net.expectIn];
   for i=1:N
     net.blobsId([net.layers{i}.name]) = cs(i)+1;
+   
     for j=1:noutputs(i)
       net.blobsId([net.layers{i}.name ':' num2str(j)]) = cs(i)+j;
     end

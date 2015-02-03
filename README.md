@@ -11,7 +11,6 @@ Other such libraries that also inspired Maté include [Decaf](https://github.com
 [Caffe](http://caffe.berkeleyvision.org/) (C++ with interfaces, CPU/GPU).
 
 ##Functionality
-
 Maté provides functionality for:
 * Easy definition of new layers (just define forward and, if needed, backward procedures; it often takes couple of lines in MATLAB).
 * Easy definition of non-chain networks (any directed acyclic graph can be defined with ease) within MATLAB code.
@@ -19,9 +18,9 @@ Maté provides functionality for:
 * Easy visualization of the internal state of a network during training.
 
 ##Installation 
-Install MatConvNet (http://www.vlfeat.org/matconvnet/), clone this repository, and run setup.m (which simply adds subfolders to MATLAB path).
+Install MatConvNet from [here](http://www.vlfeat.org/matconvnet/), clone this repository, and run setup.m (which simply adds subfolders to MATLAB path).
 
-##How-to
+##Howto
 * [Build a network (+other basics)](docs/network.md)
 * [Train a network](docs/training.md)
 * [Layer catalog](docs/catalog.md)
