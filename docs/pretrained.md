@@ -15,7 +15,7 @@ procedure. A network that is applicable to batches can be built by striping the
 first layer and using it separately to preprocess each image:
 
 ```matlab
-images = { imread('im1.png'), imread('im2.png', imread('im3.png') };
+images = { imread('im1.png'), imread('im2.png'), imread('im3.png') };
 layers = readMatConvNet(modelfilename); 
 
 %preparing the batch
