@@ -1,7 +1,9 @@
 #Maté
 
 **Maté** is a MATLAB library for ConvNets (Convolutional Neural Networks).
-Maté is derived from [**MatConvNet**](http://www.vlfeat.org/matconvnet/) and uses MatConvNet routines for several time-critical operations. 
+Maté is derived from [**MatConvNet**](http://www.vlfeat.org/matconvnet/). 
+Maté uses MatConvNet routines for several time-critical operations and can 
+load and manipulate [pretrained networks](http://www.vlfeat.org/matconvnet/pretrained/) supplied with MatConvNet. 
 
 Maté is object-oriented and has the goal to simplify prototyping and experimentation, in particular
 to minimize the efforts needed to try new non-standard layers and new non-standard network graphs.
@@ -18,7 +20,7 @@ Maté provides functionality for:
 * Easy visualization of the internal state of a network during training.
 
 ##Installation 
-Install MatConvNet from [here](http://www.vlfeat.org/matconvnet/), clone this repository, and run setup.m (which simply adds subfolders to MATLAB path).
+Install MatConvNet from [here](http://www.vlfeat.org/matconvnet/), clone this repository, and run *setup.m* (which simply adds subfolders to MATLAB path).
 
 ##Howto
 * [Build a network (+other basics)](docs/network.md)
@@ -26,6 +28,9 @@ Install MatConvNet from [here](http://www.vlfeat.org/matconvnet/), clone this re
 * [Layer catalog](docs/catalog.md)
 * [Define a new layer](docs/layer.md)
 
+##Citation
+If you use Maté to prepare your publication, please cite MatConvNet report as
+suggested [here](http://www.vlfeat.org/matconvnet/).
 
 ##Status
 The project is in a very early prerelease state, use at your own risk.
