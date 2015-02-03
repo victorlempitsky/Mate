@@ -14,19 +14,19 @@ end
 %trying on peppers
 
 %using MatConvNet model + an argmax layer
-net = MateNet( cat(1,layers, {MateArgmaxLayer('name','class')}) );
+net = MateNet( [ layers; {MateArgmaxLayer('name','classifier')} ] );
 
 im = imread('peppers.png');
 net = net.makePass(im);
 
 imshow(im);
 fprintf('This image is classified as "%s".\n',...
-          classes.description{net.getBlob('class')});
+          classes.description{net.getBlob('classifier')});
 
 %testing speed in batch mode
 net = MateNet(layers(2:end)); %same network without preprocessor and argmax
 batchSz = 256;
-im = layers{1}.forward(im); %preprocess an image
+im = layers{1}.forward(im); %preprocess an image and duplicate into a batch
 batch = repmat(im,[1 1 1 batchSz]); 
 
 net = net.makePass(batch); %warm-up

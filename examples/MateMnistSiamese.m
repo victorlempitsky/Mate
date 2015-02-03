@@ -4,7 +4,7 @@ function MateMnistSiamese
 [thispath,~,~] = fileparts(mfilename('fullpath'));
 dataDir = [thispath '/data/mnist'] ;
 expDir = [thispath '/data/expSiamese'] ;
-useGpu = true;
+useGpu = false;
 
 dataset = struct;
 dataset.imdb = getMnistImdb(dataDir) ;
@@ -60,7 +60,7 @@ nnEval = {
   MateNNAccuracyLayer('name','nnAccuracy', 'takes',{'allDist1','input:4'})
 };
 
-net = MateNet(cat(1, encoder1, encoder2, top, nnEval));
+net = MateNet( [ encoder1; encoder2; top; nnEval ]);
 
 %subtract the mean
 dataset.imdb.images.data = bsxfun(@minus, dataset.imdb.images.data,...
