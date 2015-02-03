@@ -101,7 +101,7 @@ E.g. suppose the trained network `net` has two last layers that computed the los
 and took the ground truth labels as `'input:2'`. Now, a testtime network that does not rely on the availability
 of labels and simply provides predictions can be created with:
 ```matlab
-netTest = MateNet( net.layers(1:end-2) );
+netTest = MateNet( net.layers(1:end-2) ); %testtime network created
 testData = .... %get some unlabeled data from somewhere
 netTest = netTest.makePass(testData);
 predictions = netTest.getBlob('prediction');
