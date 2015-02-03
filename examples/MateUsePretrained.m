@@ -3,7 +3,7 @@ fname = 'imagenet-caffe-alex.mat';
 webloc = 'http://www.vlfeat.org/matconvnet/models/';
 
 if ~exist([pathto fname],'file')
-  disp('Loading model from the VGG website..,');
+  disp('Loading the model from the MatConvNet repository...');
   websave([pathto fname], [webloc fname]);
   disp('Done...');
 end
