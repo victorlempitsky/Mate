@@ -5,16 +5,13 @@ classdef MateAllDistLayer < MateLayer
     end
     
     function [y,obj] = forward(obj,x)
-      sz = size(x);
-      x_ = reshape(x, prod(sz(1:end-1)), sz(end));
-      len = sum(x_.*x_);
-      y = bsxfun(@plus, len, len').*single(0.5) - x_'*x_;
+      assert(ismatrix(x));
+      len = sum(x.*x);
+      y = bsxfun(@plus, len, len').*single(0.5) - x'*x;
     end
     
-    function [dzdx,obj] = backward(obj, x, dzdy, y)
-      sz = size(x);
-      x_ = reshape(x, prod(sz(1:end-1)), sz(end));      
-      dzdx = reshape( bsxfun(@times, x_, sum(dzdy,1)) - x_*dzdy, sz );
+    function [dzdx,obj] = backward(obj, x, dzdy, y)   
+      dzdx = bsxfun(@times, x_, sum(dzdy,1));
     end
   end  
 end
