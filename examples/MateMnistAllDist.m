@@ -23,10 +23,9 @@ net = MateNet( {
   MateConvLayer(f*randn(4,4,50,500, 'single'), zeros(1, 500, 'single'), ...
                 'stride', 1, 'pad', 0, 'weightDecay', [0.005 0.005])  
   MateReluLayer
-  MateConvLayer(f*randn(1,1,500,10, 'single'), zeros(1, 10, 'single'), ...
-                'stride', 1, 'pad', 0, ...
-                'weightDecay', [0.005 0.005])
-  MateSqueezeLayer
+  MateFlattenLayer
+  MateFullLayer(f*randn(10,500, 'single'), zeros(10,1, 'single'),... 
+                'weightDecay', [0.005 0.005], 'name','full') 
   MateAllDistLayer('name','distances')  
   MateMetricHingeLossLayer('takes',{'distances','input:2'},...
                 'name','loss', 'positiveWeight', 10)
@@ -93,7 +92,7 @@ x{2} = single(bsxfun(@eq,labels',labels));
 end
 
 %--------------------------------------------------------------%
-function [net,dataset] = onEpochEnd(net,dataset)
+function [net,dataset,learningRate] = onEpochEnd(net,dataset,learningRate)
 dataset.train = dataset.train(randperm(numel(dataset.train)));
 
 end

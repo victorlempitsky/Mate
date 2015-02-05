@@ -1,5 +1,5 @@
 pathto = '/media/storage/vilem/Downloads/';
-fname = 'imagenet-caffe-alex.mat';
+fname = 'imagenet-caffe-ref.mat';
 webloc = 'http://www.vlfeat.org/matconvnet/models/';
 
 if ~exist([pathto fname],'file')
@@ -53,4 +53,4 @@ end
 tm = toc;
 fprintf('Batch forward-passed on GPU in %f sec.\n', tm/10);
 
-net = net.dispTimes;
+dispTimes(net);

@@ -26,8 +26,9 @@ encoder1 = {
   MateConvLayer(f*randn(4,4,50,500, 'single'), zeros(1, 500, 'single'), ...
                 'name','conv3','stride', 1, 'pad', 0, 'weightDecay', [0.005 0.005])
   MateReluLayer
-  MateConvLayer(f*randn(1,1,500,10, 'single'), zeros(1, 10, 'single'), ...
-                'name','conv4','stride', 1, 'pad', 0, 'weightDecay', [0.005 0.005])  
+  MateFlattenLayer
+  MateFullLayer(f*randn(10,500, 'single'), zeros(10,1, 'single'),... 
+                'weightDecay', [0.005 0.005], 'name','full')  
 };
 
 %second encoder (note parameter sharing with the first encoder
@@ -42,21 +43,22 @@ encoder2 = {
   MateConvLayer([], [], ...
                 'shareWith','conv3','stride', 1, 'pad', 0)
   MateReluLayer
-  MateConvLayer([], [], ...
-                'shareWith','conv4','stride', 1, 'pad', 0,'name','conv4_2')                  
+  MateFlattenLayer
+  MateFullLayer([], [],... 
+                'weightDecay', [0.005 0.005],...
+                'shareWith', 'full', 'name','full_2')  
 };
 
 %computing the distance and defining the loss
 top = {
-  MatePairwiseDistLayer('takes',{'conv4','conv4_2'},'name','dist')
+  MatePairwiseDistLayer('takes',{'full','full_2'},'name','dist')
   MateMetricHingeLossLayer('takes',{'dist','input:3'},...
         'name','loss', 'margin', 1)
 };
 
 %nearest neighbor evaluator
 nnEval = {
-  MateSqueezeLayer('takes','conv4','skipBackward',true)
-  MateAllDistLayer('name','allDist1','skipBackward',true)
+  MateAllDistLayer('name','allDist1','skipBackward',true, 'takes', 'full')
   MateNNAccuracyLayer('name','nnAccuracy', 'takes',{'allDist1','input:4'})
 };
 
