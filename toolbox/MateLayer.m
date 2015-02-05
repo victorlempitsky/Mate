@@ -110,6 +110,46 @@ classdef MateLayer
       end      
     end
     
+    function disp(obj)
+      fprintf('%s (%s)\n', obj.name, class(obj));
+      fprintf('Takes ');
+      for t = obj.takes
+        fprintf(' %s ', t{1});
+      end
+      fprintf('\n');
+          
+      for i=1:numel(obj.weights.w)
+        fprintf('Learnable param of size [ ');
+        fprintf('%d ',size(obj.weights.w{i}));
+        fprintf(' ]\n');
+      end
+        
+      if ~isempty(obj.shareWith)
+        fprintf('Shared with %s\n', obj.shareWith);
+      end
+      
+      %printing child-specific fields
+      fields = fieldnames(obj);
+      exclude = {'name','takes','weights','shareWith'};
+      for f = fields'
+        val = getfield(obj,f{1}); 
+        if any(strcmp(f{1},exclude)) || isempty(val)
+          continue;
+        end
+        if numel(val) > 8 
+          fprintf('%s of size [ ',f{1});
+          fprintf('%d ', size(val));
+          fprintf(' ]\n');
+        elseif isnumeric(val)
+          fprintf('%s [ ',f{1});
+          fprintf('%f ',single(val));
+          fprintf(' ]\n');
+        elseif ischar(val)
+          fprintf('%s %s\n', f{1}, val);
+        end
+      end
+    end
+    
   end 
   
 end

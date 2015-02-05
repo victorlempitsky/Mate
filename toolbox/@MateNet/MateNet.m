@@ -54,6 +54,7 @@ classdef MateNet
     [x, dzdx] = getBlob(net, blobName)
     dispTimes(net)
     dispBlob(net,blobNames) %displays one or multiple blobs 
+    disp(net)
   end
   
 end
