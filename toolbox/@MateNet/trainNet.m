@@ -61,7 +61,9 @@ end
 
 if latestEpoch > 0
   fprintf('resuming by loading epoch %d\n', latestEpoch) ;
+  mode = net.mode;
   load(sprintf(modelPath, latestEpoch), 'net', 'info') ;
+  net = net.move(mode);
 end
 
 startEpoch = latestEpoch+1;
@@ -218,7 +220,10 @@ for epoch=startEpoch:opts.numEpochs
   
   % save
   if ~isempty(modelPath)
-    save(sprintf(modelPath,epoch), 'net', 'info') ;
+    mode = net.mode;
+    net = net.move('cpu');
+    save(sprintf(modelPath,epoch), 'net', 'info','-v7.3') ;
+    net = net.move(mode);
     if mod(epoch-1,opts.snapshotFrequency) ~= 0 && exist(sprintf(modelPath,epoch-1))
       delete(sprintf(modelPath,epoch-1));
     end

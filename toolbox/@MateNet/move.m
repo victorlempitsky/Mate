@@ -1,6 +1,7 @@
 function net = move( net, destination)
 %MOVE Summary of this function goes here
 %   Detailed explanation goes here
+net = net.clearBlobs;
 if ~strcmp(net.mode,destination)
   switch destination
     case 'gpu', moveop = @(x) gpuArray(x) ;
@@ -11,10 +12,10 @@ if ~strcmp(net.mode,destination)
     net.layers{l} = net.layers{l}.move(destination);
   end
 
-  for n = 1:net.nBlobs
-    net.x{n} = moveop(net.x{n});
-    net.dzdx{n} = moveop(net.dzdx{n});
-  end
+%   for n = 1:net.nBlobs
+%     net.x{n} = moveop(net.x{n});
+%     net.dzdx{n} = moveop(net.dzdx{n});
+%   end
 
   net.mode = destination;
 end

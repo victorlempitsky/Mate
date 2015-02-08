@@ -41,8 +41,29 @@ classdef MateNet
    
     function snet = saveobj(net)
       snet = net;
-      snet.x = {};
-      snet.dzdx = {};
+      snet = snet.clearBlobs;
+%       if strcmp(snet.mode,'gpu')
+%         %deep copy of learnable parameters needed
+%         for i=1:numel(snet.layers)
+%           for j=1:numel(snet.layers{i}.weights.w)
+%             if isempty(snet.layers{i}.weights.w)
+%               continue;
+%             end
+%             tmp = snet.layers{i}.weights;
+%             save('tmpmate.mat','tmp','-v6');
+%             load('tmpmate.mat');
+%             delete('tmpmate.mat');
+%             snet.layers{i}.weights = tmp;            
+%           end
+%         end      
+%         snet = snet.move('cpu');
+%         snet.mode = 'gpu';
+%       end
+    end
+    
+    function net = clearBlobs(net)
+      net.x = cell(net.nBlobs,1);
+      net.dzdx = cell(net.nBlobs,1);
     end
       
  
