@@ -5,7 +5,12 @@ function x = getPlate(array, maxSz)
 %3-channeled array otherwise.
 
 x = squeeze(array);
-assert(ndims(x) == 3 || ndims(x) == 4,'getPlate should be called for arrays of dimensionality 3 or 4.');
+assert(ndims(x) == 2 || ndims(x) == 3 || ndims(x) == 4,...
+  'getPlate should be called for arrays of dimensionality 3 or 4.');
+
+if ndims(x) == 2
+  return
+end
 
 if size(array,3) == 3 
   if ndims(array) == 3

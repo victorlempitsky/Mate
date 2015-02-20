@@ -1,7 +1,7 @@
 classdef MateLayer
 % The abstract class for all layers in Mate
   properties
-    name = {};
+    name = [];
     takes = 'preceding';
     weightDecay = [];
     learningRate = [];
@@ -113,8 +113,12 @@ classdef MateLayer
     function disp(obj)
       fprintf('%s (%s)\n', obj.name, class(obj));
       fprintf('Takes ');
-      for t = obj.takes
-        fprintf(' %s ', t{1});
+      if iscell(obj.takes)
+        for t = obj.takes
+          fprintf(' %s ', t{1});
+        end
+      else
+        fprintf(' %s ',obj.takes);
       end
       fprintf('\n');
           

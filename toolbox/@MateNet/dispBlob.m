@@ -15,27 +15,26 @@ for blobName = blobNames
 
   if ndims(x) > 4 || isscalar(x)
     warning('Scalars and (>4)-dimensional blobs are not supported in net.distBlob.');
-    return
+    continue
   end
 
   figure(1000+net.blobsId(blobName));
   set(gcf,'Name',blobName);
 
-  if ndims(x) == 1
+  if isvector(x)
     subplot(2,1,1); plot(x); title(blobName);
-    subplot(2,1,2); plot(sort(x)); title([blobName ' (sorted)']);
-  end
-
-  if ndims(x) == 2
-    imagesc(x); colorbar;
+    %subplot(2,1,2); plot(sort(x)); title([blobName ' (sorted)']);
+  elseif ndims(x) == 2 || ( ndims(x) == 3 && size(x,3) == 3 )
+    imagesc(x); 
+    if ndims(x) == 2
+      colorbar;
+    end
   %   if max(size(x)) > 200
   %     imagesc(x);
   %   else
   %     pcolor(x);
   %   end
-  end
-
-  if ndims(x) == 3 || ndims(x) == 4
+  elseif ndims(x) == 3 || ndims(x) == 4
     imagesc(getPlate(x)); 
     if size(x,3) ~= 3
       colorbar;  

@@ -11,7 +11,7 @@ classdef MateAllDistLayer < MateLayer
     end
     
     function [dzdx,obj] = backward(obj, x, dzdy, y)   
-      dzdx = bsxfun(@times, x_, sum(dzdy,1));
+      dzdx = bsxfun(@times, x, sum(dzdy,1));
     end
   end  
 end
