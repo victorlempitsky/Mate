@@ -1,6 +1,5 @@
 classdef MateL2NormalizeLayer < MateLayer
-% implements local normalization across feature channels
-%a wrapper around MatConvNet vl_nnnormalize
+% normalizes each vector in L2 norm (flattened state only)
   properties
     N = 5;
     kappa = 0;
