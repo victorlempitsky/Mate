@@ -95,11 +95,11 @@ the batch.
 
 ### Deriving new networks
 Once the network `net` is modified, e.g. trained, a new network `net2` can be defined by taking a subset of the 
-layers of the old one (and supplementing them with new layers).
+layers of the old one (and supplementing them with new layers if needed).
 
-E.g. suppose the trained network `net` has two last layers that computed the loss and the error
-and took the ground truth labels as `'input:2'`. Now, a testtime network that does not rely on the availability
-of labels and simply provides predictions can be created with:
+E.g. suppose you have a trained network `net` with the two last layers computing the loss and the error. Thus, the network
+needs ground truth labels as `'input:2'` and is inapplicable when you do not have such labels. Then, a testtime network
+that does not rely on the availability of labels and simply provides predictions can be created with:
 ```matlab
 netTest = MateNet( net.layers(1:end-2) ); %testtime network created
 testData = .... %get some unlabeled data from somewhere
@@ -108,8 +108,11 @@ predictions = netTest.getBlob('prediction');
 ```
 Similar tricks can be used to e.g. pretrain some parts of the big network within smaller networks, etc.
 
+Importantly, when different networks share common history (as an example above), the learnable parameters stay shared.
+E.g. modifying the parameters in `netTest` will also modify the paramters in `net`.
+
 ### Sharing parameters between layers
-Some architectures requires tying together (sharing) learnable parameters across layers,
+Some architectures require tying together (sharing) learnable parameters across layers,
 this can be done using `'shareWith'` attribute during layer construction:
 ```matlab
 net = MateNet( {
@@ -125,7 +128,7 @@ Now, `'Blah1'` and `'Blah2'` will share learnable parameters.
 Note, that `'shareWith'` should point to the layer defined above (earlier in the cell array submitted to `MateNet()`).
 
 ### CPU/GPU
-Assuming, GPU is present and supported by MATLAB (i.e. you can create a gpuArray),
+Assuming GPU is present and supported by MATLAB (i.e. you can create a gpuArray),
 a network can be moved to GPU using `net = net.move('gpu');` and back to CPU using `net = net.move('cpu');`.
 MATLAB version R2014b (or later) is highly recommended for the GPU mode of Maté (and, in fact, MatConvNet).
 
