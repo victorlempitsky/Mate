@@ -54,6 +54,22 @@ classdef MateLayer
       end
     end
     
+    function obj = updateNagStart(obj, mr) 
+      for j = 1:numel(obj.weights.w)
+        obj.weights.momentum{j} = mr*obj.weights.momentum{j};
+        obj.weights.w{j} = obj.weights.w{j}+obj.weights.momentum{j};
+      end
+    end    
+    
+    function obj = updateNagEnd(obj, lr, batchSz) 
+      for j = 1:numel(obj.weights.w)
+        d = -lr*obj.learningRate(j)*obj.weightDecay(j)*obj.weights.w{j}-...
+          lr*obj.learningRate(j)/batchSz*obj.weights.dzdw{j};
+        obj.weights.momentum{j} = obj.weights.momentum{j}+d;
+        obj.weights.w{j} = obj.weights.w{j}+d;
+      end
+    end    
+    
     function obj = move(obj, destination)
       switch destination
         case 'gpu'

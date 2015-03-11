@@ -15,6 +15,7 @@ opts.showBlobs = {};
 opts.showLayers = {};
 opts.onEpochEnd = [];
 opts.showTimings = true;
+opts.optAlg = 'nag'; %can be nag or sgd
 opts.snapshotFrequency = 30; %epochs that are kept on the disk
 
 opts = vl_argparse(opts, varargin) ;
@@ -114,13 +115,31 @@ for epoch=startEpoch:opts.numEpochs
       end 
     end    
 
-    % backprop
-    net = makePass(net, x, true, 'sync', opts.sync);
-    
-    % gradient step
-    for l=net.updateSchedule
-      net.layers{l} = update(net.layers{l},lr, opts.momentum, batch_size);
+    switch(opts.optAlg)
+      case 'sgd'
+        % backprop
+        net = makePass(net, x, true, 'sync', opts.sync);
+
+        % gradient step
+        for l=net.updateSchedule
+          net.layers{l} = update(net.layers{l},lr, opts.momentum, batch_size);
+        end
+      case 'nag'
+        for l=net.updateSchedule
+          net.layers{l} = updateNagStart(net.layers{l}, opts.momentum);
+        end
+
+        % backprop
+        net = makePass(net, x, true, 'sync', opts.sync);
+
+        % gradient step
+        for l=net.updateSchedule
+          net.layers{l} = updateNagEnd(net.layers{l},lr, batch_size);
+        end
+      otherwise
+        error('Unsupported optimization algorithm');
     end
+
 
     % print information
     batch_time = toc(batch_time) ;
